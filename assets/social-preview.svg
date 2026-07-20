@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640" role="img" aria-labelledby="title desc">
+  <title id="title">Universal Second Brain</title>
+  <desc id="desc">Cross-platform, provider-neutral Obsidian second brain with cloud and local AI support.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#07111f"/>
+      <stop offset="0.55" stop-color="#10284a"/>
+      <stop offset="1" stop-color="#311659"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="70%" cy="46%" r="44%">
+      <stop stop-color="#23d5ff" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#23d5ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <rect width="1280" height="640" fill="url(#glow)"/>
+  <g fill="none" stroke="#5adfff" stroke-opacity=".42" stroke-width="2">
+    <path d="M790 168L930 112 1080 182 1128 318 1040 455 872 478 744 368Z"/>
+    <path d="M790 168L872 478M930 112L1040 455M1080 182L744 368M1128 318L872 478"/>
+    <circle cx="790" cy="168" r="9" fill="#75e8ff"/><circle cx="930" cy="112" r="9" fill="#75e8ff"/><circle cx="1080" cy="182" r="9" fill="#75e8ff"/><circle cx="1128" cy="318" r="9" fill="#b892ff"/><circle cx="1040" cy="455" r="9" fill="#b892ff"/><circle cx="872" cy="478" r="9" fill="#75e8ff"/><circle cx="744" cy="368" r="9" fill="#b892ff"/>
+  </g>
+  <g fill="#66e5ff" opacity=".65" filter="url(#soft)">
+    <circle cx="930" cy="112" r="25"/><circle cx="1040" cy="455" r="25"/><circle cx="744" cy="368" r="25"/>
+  </g>
+  <g fill="#d9f6ff" font-family="Arial, Helvetica, sans-serif">
+    <text x="92" y="252" font-size="65" font-weight="700" letter-spacing="-2">Universal</text>
+    <text x="92" y="326" font-size="65" font-weight="700" letter-spacing="-2">Second Brain</text>
+    <text x="96" y="386" font-size="25" fill="#a9cbe0">An open, cross-platform knowledge system for Obsidian</text>
+    <text x="96" y="425" font-size="19" fill="#8eb0c8">Cloud or local AI  •  Claude Code  •  Codex  •  Cursor</text>
+  </g>
+  <rect x="92" y="468" width="265" height="42" rx="21" fill="#23c9ed"/>
+  <text x="116" y="496" fill="#07111f" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">OPEN SOURCE · AGPLv3</text>
+</svg>
