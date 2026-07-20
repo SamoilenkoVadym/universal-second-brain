@@ -8,6 +8,7 @@ from pathlib import Path
 from .automation import task_map
 from .config import Config, LLMConfig, PathsConfig, SUPPORTED_PROVIDERS, SecretStore, load, save, validate
 from .integrations import install as install_integrations, status as integration_status
+from .operations import backup as create_backup, build_index, execute, restore as restore_backup, search as search_vault
 from .paths import app_paths, ensure_runtime
 from .providers import healthcheck
 from .scheduler import activate, render
@@ -100,12 +101,58 @@ def run(args: argparse.Namespace) -> int:
         print(f"Unknown task: {args.task}")
         return 2
     paths = app_paths()
-    audit = paths.data_dir / "logs" / "automation-audit.jsonl"
-    audit.parent.mkdir(parents=True, exist_ok=True)
-    audit.write_text(audit.read_text(encoding="utf-8") if audit.exists() else "", encoding="utf-8")
-    with audit.open("a", encoding="utf-8") as handle:
-        handle.write(json.dumps({"task": task.name, "description": task.description, "status": "dispatched"}) + "\n")
-    print(f"Dispatched {task.name}; audit log: {audit}")
+    if not paths.config_file.exists():
+        print("Configuration is missing; run `second-brain setup` first.")
+        return 2
+    config = load(paths.config_file)
+    if task.mutates_vault and config.safety.get("backup_before_mutation", True):
+        result = {"backup": str(create_backup(Path(config.paths.vault), paths)), **execute(task, config, paths)}
+    else:
+        result = execute(task, config, paths)
+    print(json.dumps(result, ensure_ascii=False, indent=2) if args.json else f"Completed {task.name}.")
+    return 0
+
+
+def index(args: argparse.Namespace) -> int:
+    paths = app_paths()
+    if not paths.config_file.exists():
+        print("Configuration is missing; run `second-brain setup` first.")
+        return 2
+    target = build_index(Path(load(paths.config_file).paths.vault), paths)
+    print(json.dumps({"index": str(target)}) if args.json else f"Index updated: {target}")
+    return 0
+
+
+def search(args: argparse.Namespace) -> int:
+    paths = app_paths()
+    if not paths.config_file.exists():
+        print("Configuration is missing; run `second-brain setup` first.")
+        return 2
+    results = search_vault(Path(load(paths.config_file).paths.vault), paths, args.query, args.limit)
+    if args.json:
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+    else:
+        print("\n".join(f"[{item['score']}] {item['path']} — {item['title']}" for item in results) or "No matching notes.")
+    return 0
+
+
+def backup(args: argparse.Namespace) -> int:
+    paths = app_paths()
+    if not paths.config_file.exists():
+        print("Configuration is missing; run `second-brain setup` first.")
+        return 2
+    target = create_backup(Path(load(paths.config_file).paths.vault), paths)
+    print(str(target))
+    return 0
+
+
+def restore(args: argparse.Namespace) -> int:
+    paths = app_paths()
+    if not paths.config_file.exists():
+        print("Configuration is missing; run `second-brain setup` first.")
+        return 2
+    count = restore_backup(Path(args.archive).expanduser(), Path(load(paths.config_file).paths.vault))
+    print(f"Restored {count} file(s).")
     return 0
 
 
@@ -133,10 +180,24 @@ def main(argv: list[str] | None = None) -> int:
         command.set_defaults(func=func)
     command = sub.add_parser("run")
     command.add_argument("task")
+    command.add_argument("--json", action="store_true")
     command.set_defaults(func=run)
+    command = sub.add_parser("index")
+    command.add_argument("--json", action="store_true")
+    command.set_defaults(func=index)
+    command = sub.add_parser("search")
+    command.add_argument("--query", required=True)
+    command.add_argument("--limit", type=int, default=10)
+    command.add_argument("--json", action="store_true")
+    command.set_defaults(func=search)
+    command = sub.add_parser("backup")
+    command.set_defaults(func=backup)
+    command = sub.add_parser("restore")
+    command.add_argument("--archive", required=True)
+    command.set_defaults(func=restore)
     command = sub.add_parser("install")
     command.set_defaults(func=install)
-    for name in ("enable", "disable", "search", "backup", "restore", "migrate", "update", "uninstall"):
+    for name in ("enable", "disable", "migrate", "update", "uninstall"):
         command = sub.add_parser(name)
         command.set_defaults(func=lambda _: 0)
     args = parser.parse_args(argv)
