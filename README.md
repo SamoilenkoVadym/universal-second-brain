@@ -1,5 +1,8 @@
 # Universal Second Brain
 
+[![CI](https://github.com/SamoilenkoVadym/universal-second-brain/actions/workflows/ci.yml/badge.svg)](https://github.com/SamoilenkoVadym/universal-second-brain/actions/workflows/ci.yml)
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
+
 A cross-platform, provider-neutral second-brain runtime for an Obsidian vault.
 
 It keeps configuration, indexes, logs, backups, and credentials outside the vault; lets each user choose cloud or local AI; and installs native automations for macOS, Linux, or Windows.
