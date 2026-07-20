@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "universal-second-brain"
+version = "0.1.0"
+description = "A portable, provider-neutral Obsidian second brain."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+secrets = ["keyring>=25.0"]
+dev = ["pytest>=8.0", "ruff>=0.6"]
+
+[project.scripts]
+second-brain = "second_brain.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
