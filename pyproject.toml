@@ -7,6 +7,7 @@ name = "universal-second-brain"
 version = "0.1.0"
 description = "A portable, provider-neutral Obsidian second brain."
 readme = "README.md"
+license = "AGPL-3.0-or-later"
 requires-python = ">=3.11"
 dependencies = []
 

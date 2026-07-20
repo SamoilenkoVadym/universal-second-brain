@@ -43,3 +43,9 @@ Cloud API keys are stored in the operating system credential store when the opti
 The registry includes session capture, raw flush, enrichment, compilation, semantic and Obsidian indexing, skill harvesting/provisioning, quality gates, linting, duplicate repair, reports, watchdogs, backups, and notifications. Each task has an explicit schedule and safety classification.
 
 See [docs/operations.md](docs/operations.md) for commands, integrations, and migration notes.
+
+## License and contributions
+
+This project is licensed under the [GNU Affero General Public License v3.0 or later](LICENSE). If you distribute a modified version or operate a modified version for users over a network, you must make the corresponding source code available under the same license.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the required change description and publication policy.
